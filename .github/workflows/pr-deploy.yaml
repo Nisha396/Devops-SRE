@@ -35,7 +35,7 @@ jobs:
       - name: Lint Dockerfile through Ruf
         run: |
             pip install ruff
-            ruff check Dockerfile
+            ruff check app/ test/
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
