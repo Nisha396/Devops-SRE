@@ -32,7 +32,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Lint Dockerfile through Ruf
+      - name: Lint through Ruff
         run: |
             pip install ruff
             ruff check app/ test/
