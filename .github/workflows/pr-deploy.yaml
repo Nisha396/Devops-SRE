@@ -56,7 +56,7 @@ jobs:
 
       - name: Test with pytest
         run: |
-          pytest test_case.py --maxfail=1 --disable-warnings -q
+          pytest test/test_case.py --maxfail=1 --disable-warnings -q
 
 
       - name: Build the Docker image
