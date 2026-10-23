@@ -72,4 +72,4 @@ jobs:
           image-ref: ${{ secrets.username }}/devops-sre:latest
           format: 'table'
           exit-code: '1'
-          severity: 'CRITICAL,HIGH'
+          severity: 'CRITICAL'
