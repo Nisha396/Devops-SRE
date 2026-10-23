@@ -10,6 +10,8 @@ jobs:
 
     permissions:
       contents: write
+      security-events: write
+      actions: read
 
     steps:
       - name: Checkout repository
@@ -25,6 +27,8 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         with:
           category: "secret-scanning"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Lint Dockerfile through Ruf
         run: |
