@@ -1,0 +1,75 @@
+name: Working branch Pipeline
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test-Image:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      security-events: write
+      actions: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+            python-version: '3.12'
+            cache: 'pip'
+
+      - name: secret scan
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          category: "secret-scanning"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lint through Ruff
+        run: |
+            pip install ruff
+            ruff check app/ test/
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: 'python'
+          config-file: .github/codeql/codeql-config.yaml
+
+      - name: Autobuild CodeQL
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Run CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+      - name: Install test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+
+      - name: Test with pytest
+        run: |
+          pytest test/test_case.py --maxfail=1 --disable-warnings -q
+
+
+      - name: Build the Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: ${{ secrets.username }}/devops-sre:latest
+
+      - name: Run Trivy Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ secrets.username }}/devops-sre:latest
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL'

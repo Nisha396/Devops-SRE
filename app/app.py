@@ -1,7 +1,7 @@
-import time
 import logging
 import sys
 import threading
+import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 # Configure logging to output to stdout
@@ -45,7 +45,7 @@ def main():
     try:
         data.append(bytearray(100 * 1024 * 1024))
         logger.info("Allocated initial 100MB")
-    except Exception as e:
+    except MemoryError as e:
         logger.error(f"Failed to allocate initial memory: {e}")
         return
 
@@ -72,8 +72,8 @@ def main():
         except MemoryError:
             logger.error("OOM limits exceeded or MemoryError caught.")
             break
-        except Exception as e:
-            logger.error(f"Unexpected error: {e}")
+        except OSError as e:
+            logger.error(f"System or operational error: {e}")
             break
 
 if __name__ == "__main__":
