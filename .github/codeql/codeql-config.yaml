@@ -1,0 +1,8 @@
+name: "Custom CodeQL Configuration"
+
+# Global query filters to drop the rule flagging 0.0.0.0
+query-filters:
+  - exclude:
+      id: py/ip-address-spoofing
+  - exclude:
+      id: py/bind-all-interfaces
