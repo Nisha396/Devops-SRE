@@ -1,3 +1,3 @@
 manifests/Secret.yaml:generic-api-key:12
-manifests/Secret.yaml:db-password:13
+manifests/Secret.yaml:generic-api-key:13
 manifests/Secret.yaml:kubernetes-secret-yaml:2
