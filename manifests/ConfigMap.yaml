@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: ConfigMap
+metadata:
+  name: devops-sre-configmap
+  namespace: devops-sre-namespace
+  labels:
+    app: devops-sre-app
+  annotations:
+    description: "This is a ConfigMap for my DevOps SRE application"
+data:
+  config.yaml: |
+    # Configuration for DevOps SRE application
+    database:
+      host: db.devops-sre.svc.cluster.local
+      port: 5432
