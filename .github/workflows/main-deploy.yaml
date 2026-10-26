@@ -23,13 +23,13 @@ jobs:
         run: echo "IMAGE_TAG=${{ github.run_number }}-${{ github.sha }}" >> $GITHUB_ENV
 
       - name: Build the Docker image
-        run: docker build -t ${{ secrets.username }}/devops-sre:${matrix.python-version}-${IMAGE_TAG} .
+        run: docker build -t ${{ secrets.username }}/devops-sre:${{ matrix.python-version }}-${IMAGE_TAG} .
 
       - name: Log in to Docker Hub
         run: echo ${{ secrets.password }} | docker login -u ${{ secrets.username }} --password-stdin
 
       - name: Push the Docker image
-        run: docker push ${{ secrets.username }}/devops-sre:${matrix.python-version}-${IMAGE_TAG}
+        run: docker push ${{ secrets.username }}/devops-sre:${{ matrix.python-version }}-${IMAGE_TAG}
 
       - name: Update Image Tag in Deployment Manifest
         run: sed -i "s|devops-sre:.*|devops-sre:3.12-${IMAGE_TAG}|g" manifests/Deployment-v3.12.yaml &&
@@ -41,5 +41,5 @@ jobs:
             git config  user.name "github-actions"
             git config  user.email "github-actions@github.com"
             git add manifests/Deployment-v3.12.yaml manifests/Deployment-v3.11.yaml manifests/Deployment-v3.10.yaml
-            git commit -m "Update image tag to ${matrix.python-version}-${IMAGE_TAG}"
+            git commit -m "Update image tag to ${{ matrix.python-version }}-${IMAGE_TAG}"
             git push origin main
