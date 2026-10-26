@@ -42,4 +42,5 @@ jobs:
             git config  user.email "github-actions@github.com"
             git add manifests/Deployment-v3.12.yaml manifests/Deployment-v3.11.yaml manifests/Deployment-v3.10.yaml
             git commit -m "Update image tag to ${{ matrix.python-version }}-${IMAGE_TAG}"
+            git pull
             git push origin main
