@@ -1,0 +1,9 @@
+apiVersion: apps/v1
+kind: Namespace
+metadata:
+  name: devops-sre-namespace
+  labels:
+    environment: production
+    team: devops-sre-team
+  annotations:
+    description: "This is a namespace for my DevOps SRE application"

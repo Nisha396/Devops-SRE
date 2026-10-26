@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: devops-sre-service
+  namespace: devops-sre-namespace
+  labels:
+    app: devops-sre-app
+  annotations:
+    description: "This is a service for my DevOps SRE application"
+spec:
+  selector:
+    app: devops-sre-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

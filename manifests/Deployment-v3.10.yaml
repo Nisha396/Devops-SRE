@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-sre-deployment
+  namespace: devops-sre-namespace
+  labels:
+    app: devops-sre-app
+  annotations:
+    description: "This is a deployment for my DevOps SRE application"
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+        app: devops-sre-app
+    template:
+        metadata:
+        labels:
+            app: devops-sre-app
+        spec:
+          containers:
+          - name: devops-sre-container
+            image: nishabansal19/devops-sre:3.10-57-128f1f8cc6e040adeddabf0aee98cc857727c412
+            ports:
+            - containerPort: 8080
+            volumeMounts:
+              - name: config-volume
+                mountPath: /app/config
+                readOnly: true
+            env:
+                - name: API_KEY
+                  valueFrom:
+                      secretKeyRef:
+                        name: devops-sre-secret
+                        key: api-key
+                - name: PASSWORD
+                  valueFrom:
+                      secretKeyRef:
+                        name: devops-sre-secret
+                        key: password
+            resources:
+              limits:
+                memory: "400Mi"
+                cpu: "500m"
+              requests:
+                memory: "256Mi"
+                cpu: "250m"
+            volumes:
+              - name: config-volume
+                configMap:
+                  name: devops-sre-config
