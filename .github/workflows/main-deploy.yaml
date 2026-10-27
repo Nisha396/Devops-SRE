@@ -45,4 +45,4 @@ jobs:
             git add manifests/Deployment-v3.12.yaml manifests/Deployment-v3.11.yaml manifests/Deployment-v3.10.yaml
             git diff-index --cached --quiet HEAD || git commit -m "Update image tag to ${{ matrix.python-version }}-${IMAGE_TAG}"
             git pull origin main --rebase
-            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@://github.com${{ github.repository }}.git main
+            git push origin main
