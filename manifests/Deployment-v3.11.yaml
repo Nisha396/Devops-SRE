@@ -19,7 +19,7 @@ spec:
         spec:
           containers:
           - name: devops-sre-container
-            image: nishabansal19/devops-sre:3.11-9-60a6b32e3ec79d3ac2da6488386cc1369dbb5928
+            image: nishabansal19/devops-sre:3.11-10-534f1fa77ceedea3332499ef36bb99c509398f54
             ports:
             - containerPort: 8080
             volumeMounts:
