@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: devops-sre-configmap
+  name: devops-sre-config
   namespace: devops-sre-namespace
   labels:
     app: devops-sre-app
