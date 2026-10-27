@@ -13,7 +13,7 @@ spec:
           tier: app1
     template:
         metadata:
-        labels:
+          labels:
             app: devops-sre-app
             tier: app1
         spec:
@@ -44,7 +44,7 @@ spec:
               requests:
                 memory: "256Mi"
                 cpu: "250m"
-            volumes:
-              - name: config-volume
-                configMap:
-                  name: devops-sre-config
+          volumes:
+            - name: config-volume
+              configMap:
+                name: devops-sre-config
