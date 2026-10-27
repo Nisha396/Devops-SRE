@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: devops-sre-deployment
+  name: devops-sre-deployment-3.10
   namespace: devops-sre-namespace
-  labels:
-    app: devops-sre-app
   annotations:
-    description: "This is a deployment for my DevOps SRE application"
+    description: "This is a deployment-3.10 for my DevOps SRE application"
 spec:
     replicas: 1
     selector:
         matchLabels:
-        app: devops-sre-app
+          app: devops-sre-app
+          tier: app1
     template:
         metadata:
         labels:
             app: devops-sre-app
+            tier: app1
         spec:
           containers:
           - name: devops-sre-container
