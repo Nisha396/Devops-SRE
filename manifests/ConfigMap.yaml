@@ -5,6 +5,7 @@ metadata:
   namespace: devops-sre-namespace
   labels:
     app: devops-sre-app
+    grafana_alert: "1"
   annotations:
     description: "This is a ConfigMap for my DevOps SRE application"
 data:
@@ -13,3 +14,86 @@ data:
     database:
       host: db.devops-sre.svc.cluster.local
       port: 5432
+  infra.yaml: |
+    apiVersion: v1
+    groups:
+      - orgId: 1
+        name: "Grafana Alerts"
+        folder: "Alerts"
+        interval: "1m"
+        rules:
+          - uid: "pod goes down"
+            title: "Application Health Check"
+            condition: "B"
+            for: "2m"
+            data:
+              - refId: "A"
+                relativeTimeRange:
+                  from: 300
+                  to: 0
+                datasourceUid: "prometheus"
+                model:
+                  expr: "kube_deployment_status_replicas_ready < kube_deployment_spec_replicas"
+                  intervalMs: 1000
+                  maxDataPoints: 43200
+                  refId: "A"
+              - refId: "B"
+                dataSourceUid: "-input-"
+                model:
+                    conditions:
+                        - evaluator:
+                            params:
+                            - 0
+                            type: "gt"
+                        operator:
+                            type: "and"
+                        reducer:
+                            params: []
+                            type: "last"
+                        type: "query" 
+                    type: "classic_conditions"
+            "noDataState": "OK"
+            executionErrorState: "alerting"
+            labels:
+              severity: "critical"
+            annotations:
+              summary: "Application health check alert"
+              description: "The application is not healthy. Please check the deployment status."
+          
+          - uid: "pod_oom_killed"
+            title: "Pod OOM Killed Alert"
+            condition: "B"
+            for: "1m"
+            data:
+              - refId: "A"
+                relativeTimeRange:
+                  from: 300
+                  to: 0
+                datasourceUid: "prometheus"
+                model:
+                  expr: "kube_pod_container_status_last_terminated_reason{reason='OOMKilled'} > 0"
+                  intervalMs: 1000
+                  maxDataPoints: 43200
+                  refId: "A"
+              - refId: "B"
+                dataSourceUid: "-input-"
+                model:
+                    conditions:
+                        - evaluator:
+                            params:
+                            - 0
+                            type: "gt"
+                        operator:
+                            type: "and"
+                        reducer:
+                            params: []
+                            type: "last"
+                        type: "query" 
+                    type: "classic_conditions"
+            noDataState: "OK"
+            executionErrorState: "alerting"
+            labels:
+              severity: "warning"
+            annotations:
+              summary: "Pod OOM killed alert"
+              description: "One or more pods have been OOM killed. Please investigate the cause." 
